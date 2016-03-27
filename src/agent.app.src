@@ -1,0 +1,16 @@
+{application, 'agent',
+ [{description, "Simple Agent Implementation"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, {'agent_app', []}},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {contributors, []},
+  {licenses, []},
+  {links, []}
+ ]}.
