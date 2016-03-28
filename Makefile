@@ -41,5 +41,5 @@ add_to_plt: build_plt
 		mv agent.plt.new agent.plt
 
 dialyzer:
-		dialyzer --src src --plts erlang.plt agent.plt -Wunmatched_returns -Werror_handling -Wrace_conditions -Wunderspecs | fgrep -v -f ./dialyzer.ignore-warnings
+		dialyzer --src src --plts erlang.plt agent.plt -Wunmatched_returns -Werror_handling -Wrace_conditions -Wunderspecs
 
