@@ -1,12 +1,19 @@
 agent
 =====
 
+[![Build Status](https://travis-ci.org/savonarola/agent.svg?branch=master)](https://travis-ci.org/savonarola/agent)
+
 Implementation of agent primitive for simple state menagement.
 
 Build
 -----
 
-    $ rebar3 compile
+    $ make
+
+Tests
+-----
+
+    $ make test
 
 Usage
 -----
