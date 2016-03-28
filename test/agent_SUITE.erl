@@ -21,7 +21,7 @@ all() -> [
     stop
 ].
 
-expext_timeout(Fun) ->
+expect_timeout(Fun) ->
     try
         Fun(),
         ok
@@ -54,7 +54,7 @@ get(_Config) ->
     124 = agent:get(Agent, fun(S) -> S+1 end),
 
     ct:comment("Get with lambda and timeout"),
-    timeout = expext_timeout(fun() ->
+    timeout = expect_timeout(fun() ->
         agent:get(Agent, fun(_) -> timer:sleep(10) end, 5)
     end),
     124 = agent:get(Agent, fun(S) -> S+1 end, 10),
@@ -72,7 +72,7 @@ get_and_update(_Config) ->
     126 = agent:get_and_update(Agent, fun(S) -> {S+1, S+2} end, 10),
     127 = agent:get(Agent),
 
-    timeout = expext_timeout(fun() ->
+    timeout = expect_timeout(fun() ->
         agent:get_and_update(Agent, fun(S) -> timer:sleep(10), {S, S} end, 5)
     end),
 
@@ -89,7 +89,7 @@ update(_Config) ->
     ok = agent:update(Agent, fun(S) -> S+1 end, 10),
     125 = agent:get(Agent),
 
-    timeout = expext_timeout(fun() ->
+    timeout = expect_timeout(fun() ->
         agent:update(Agent, fun(_) -> timer:sleep(10) end, 5)
     end),
 
