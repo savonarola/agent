@@ -39,18 +39,6 @@ start(Fun) when is_function(Fun, 0) ->
 start(Fun, Options) when is_function(Fun, 0) and is_list(Options)  ->
     gen_server:start(?MODULE, Fun, Options).
 
--spec get(agent()) -> term().
-get(Agent) ->
-    ?MODULE:get(Agent, fun(State) -> State end).
-
--spec get(agent(), get_fun()) -> term().
-get(Agent, Fun) when is_function(Fun, 1)->
-    gen_server:call(Agent, {get, Fun}).
-
--spec get(agent(), get_fun(), timeout()) -> term().
-get(Agent, Fun, Timeout) when is_function(Fun, 1) ->
-    gen_server:call(Agent, {get, Fun}, Timeout).
-
 -spec get_and_update(agent(), get_and_update_fun()) -> term().
 get_and_update(Agent, Fun) when is_function(Fun, 1)->
     gen_server:call(Agent, {get_and_update, Fun}).
@@ -59,13 +47,25 @@ get_and_update(Agent, Fun) when is_function(Fun, 1)->
 get_and_update(Agent, Fun, Timeout) when is_function(Fun, 1) ->
     gen_server:call(Agent, {get_and_update, Fun}, Timeout).
 
+-spec get(agent()) -> term().
+get(Agent) ->
+    ?MODULE:get(Agent, fun(State) -> State end).
+
+-spec get(agent(), get_fun()) -> term().
+get(Agent, Fun) when is_function(Fun, 1)->
+    get_and_update(Agent, fun(State) -> {Fun(State), State} end).
+
+-spec get(agent(), get_fun(), timeout()) -> term().
+get(Agent, Fun, Timeout) when is_function(Fun, 1) ->
+    get_and_update(Agent, fun(State) -> {Fun(State), State} end, Timeout).
+
 -spec update(agent(), update_fun()) -> ok.
 update(Agent, Fun) when is_function(Fun, 1)->
-    gen_server:call(Agent, {update, Fun}).
+    get_and_update(Agent, fun(State) -> {ok, Fun(State)} end).
 
 -spec update(agent(), update_fun(), timeout()) -> ok.
 update(Agent, Fun, Timeout) when is_function(Fun, 1) ->
-    gen_server:call(Agent, {update, Fun}, Timeout).
+    get_and_update(Agent, fun(State) -> {ok, Fun(State)} end, Timeout).
 
 -spec update_async(agent(), update_fun()) -> ok.
 update_async(Agent, Fun) when is_function(Fun, 1)->
@@ -87,17 +87,11 @@ stop(Agent, Reason, Timeout) ->
 init(Fun) ->
     {ok, Fun()}.
 
-handle_call({get, Fun}, _From, State) ->
-    {reply, Fun(State), State};
-
 handle_call({get_and_update, Fun}, _From, State) ->
     case Fun(State) of
         {Reply, NewState} -> {reply, Reply, NewState};
         Other -> {stop, {bad_return_value, Other}, State}
-    end;
-
-handle_call({update, Fun}, _From, State) ->
-    {reply, ok, Fun(State)}.
+    end.
 
 handle_cast({update, Fun}, State) ->
     {noreply, Fun(State)}.
