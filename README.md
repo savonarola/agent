@@ -25,14 +25,14 @@ Usage
 246 = agent:get(Agent, fun(S) -> S * 2 end),
 
 124 = agent:get_and_update(Agent, fun(S) -> {S+1, S+2} end),
-127 = agent:get(Agent),
+125 = agent:get(Agent),
 
 ok = agent:update(Agent, fun(S) -> S + 5 end),
-132 = agent:get(Agent),
+130 = agent:get(Agent),
 
 ok = agent:update_async(Agent, fun(S) -> S + 5 end),
 timer:sleep(10),
-137 = agent:get(Agent),
+135 = agent:get(Agent),
 
 agent:stop(Agent).
 ```
