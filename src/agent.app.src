@@ -1,16 +1,8 @@
 {application, 'agent',
- [{description, "Simple Agent Implementation"},
+ [{description, "Simple Agent Implementation (Elixir Agent equivalent)"},
   {vsn, "0.1.0"},
-  {registered, []},
-  {mod, {'agent_app', []}},
   {applications,
    [kernel,
     stdlib
-   ]},
-  {env,[]},
-  {modules, []},
-
-  {contributors, []},
-  {licenses, []},
-  {links, []}
+   ]}
  ]}.
