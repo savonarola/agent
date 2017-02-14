@@ -4,5 +4,8 @@
   {applications,
    [kernel,
     stdlib
-   ]}
+   ]},
+  {maintainers, ["Ilya Averyanov"]},
+  {licenses, ["Apache"]},
+  {links, [{"Github", "https://github.com/savonarola/agent"}]}
  ]}.
